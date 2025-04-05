@@ -6,12 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     @if (env('APP_ENV') === 'production')
-        <!-- Force HTTPS via JS only in production -->
-        <script>
-            if (location.protocol !== 'https:') {
-                location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-            }
-        </script>
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     @endif
     @yield('title-head')
     <!-- CSS files -->
