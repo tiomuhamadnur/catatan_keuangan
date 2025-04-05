@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Helpers\FormatRupiahHelper;
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\URL;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
@@ -60,10 +61,10 @@ class ProjectDataTable extends DataTable
 
                 return $actionButton;
             })
-            ->addColumn('modal', function($item) {
+            ->addColumn('modal', function ($item) {
                 return FormatRupiahHelper::currency($item->modal);
             })
-            ->addColumn('absorption', function($item) {
+            ->addColumn('absorption', function ($item) {
                 return FormatRupiahHelper::currency($item->absorptions->sum('total'));
             })
             ->rawColumns(['#']);
@@ -71,19 +72,20 @@ class ProjectDataTable extends DataTable
 
     public function query(Project $model): QueryBuilder
     {
-        return $model->with([
-            'location',
-            'status',
-            'category',
-            ])->newQuery();
+        return $model->with(['location', 'status', 'category'])->newQuery();
     }
 
     public function html(): HtmlBuilder
     {
+        $ajaxUrl =
+            env('APP_ENV') === 'production'
+                ? URL::route('project.index', [], true) // pakai HTTPS
+                : route('project.index'); // default (ikut APP_URL, bisa http)
+
         return $this->builder()
             ->setTableId('project-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
+            ->minifiedAjax($ajaxUrl)
             ->pageLength(10)
             ->lengthMenu([10, 50, 100, 250, 500, 1000])
             //->dom('Bfrtip')
@@ -103,18 +105,7 @@ class ProjectDataTable extends DataTable
 
     public function getColumns(): array
     {
-        return [
-            Column::computed('#')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
-            Column::make('name')->title('Name'),
-            Column::make('category.name')->title('Category'),
-            Column::make('location.name')->title('Location'),
-            Column::computed('modal')->title('Modal'),
-            Column::computed('absorption')->title('Absorption'),
-            Column::make('status.name')->title('Status'),
-            Column::make('start_date')->title('Start Date'),
-            Column::make('end_date')->title('End Date'),
-            Column::make('remark')->title('Remark'),
-        ];
+        return [Column::computed('#')->exportable(false)->printable(false)->width(60)->addClass('text-center'), Column::make('name')->title('Name'), Column::make('category.name')->title('Category'), Column::make('location.name')->title('Location'), Column::computed('modal')->title('Modal'), Column::computed('absorption')->title('Absorption'), Column::make('status.name')->title('Status'), Column::make('start_date')->title('Start Date'), Column::make('end_date')->title('End Date'), Column::make('remark')->title('Remark')];
     }
 
     protected function filename(): string
