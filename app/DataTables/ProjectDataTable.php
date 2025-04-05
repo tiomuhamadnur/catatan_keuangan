@@ -80,11 +80,15 @@ class ProjectDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $ajaxUrl = app()->environment('production')
+            ? secure_url(request()->path())
+            : url(request()->path());
+
         return $this->builder()
             ->setTableId('project-table')
             ->columns($this->getColumns())
             ->ajax([
-                'url' => secure_url(request()->path()), // ← ini pakai HTTPS
+                'url' => $ajaxUrl,
                 'type' => 'GET',
             ])
             ->pageLength(10)

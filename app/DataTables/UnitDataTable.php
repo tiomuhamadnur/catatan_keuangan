@@ -60,10 +60,17 @@ class UnitDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $ajaxUrl = app()->environment('production')
+            ? secure_url(request()->path())
+            : url(request()->path());
+
         return $this->builder()
                     ->setTableId('unit-table')
                     ->columns($this->getColumns())
-                    ->minifiedAjax()
+                    ->ajax([
+                        'url' => $ajaxUrl,
+                        'type' => 'GET',
+                    ])
                     ->pageLength(10)
                     ->lengthMenu([10, 50, 100, 250, 500, 1000])
                     //->dom('Bfrtip')

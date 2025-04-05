@@ -5,9 +5,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    @if (env('APP_ENV') === 'production')
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    @endif
     @yield('title-head')
     <!-- CSS files -->
     <link href="{{ asset('dist/css/tabler.css') }}" rel="stylesheet" />
