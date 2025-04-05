@@ -23,19 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (env('APP_ENV') === 'production') {
-            // Override TrustProxies hanya saat production
-            app()->singleton(TrustProxies::class, function () {
-                return new class('*', Request::HEADER_X_FORWARDED_ALL) extends TrustProxies {
-                    public function __construct($proxies, $headers)
-                    {
-                        $this->proxies = $proxies;
-                        $this->headers = $headers;
-                    }
-                };
-            });
-
-            // Optional: force Laravel to generate HTTPS URLs
+        if (
+            Request::header('X-Forwarded-Proto') === 'https' ||
+            env('APP_ENV') === 'production'
+        ) {
             URL::forceScheme('https');
         }
 
