@@ -7,7 +7,7 @@
                 <ul class="list-inline list-inline-dots mb-0">
                     <li class="list-inline-item">
                         Copyright &copy; 2025
-                        <a href="https://instagram.com/tyomuhamadnur" class="link-primary">Tio Muhamad Nur</a>.
+                        <a href="https://instagram.com/tyomuhamadnur" target="_blank" class="link-primary">Tio Muhamad Nur</a>.
                         All rights reserved.
                     </li>
                 </ul>
