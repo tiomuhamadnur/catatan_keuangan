@@ -38,7 +38,7 @@ class ProjectController extends Controller
             "location_id" => "required|numeric",
             "name" => "required|string",
             "description" => "required|string",
-            "modal" => "required|numeric|min_digits:1",
+            "modal" => "required|numeric|min:1",
             "start_date" => "required|date",
             "end_date" => "required|date",
             "status_id" => "required|numeric",
@@ -54,7 +54,7 @@ class ProjectController extends Controller
     public function show(string $uuid, AbsorptionDataTable $dataTable)
     {
         $project = Project::where('uuid', $uuid)->firstOrFail();
-        $unit = Unit::all();
+        $unit = Unit::orderBy('code', 'ASC')->get();
 
         return $dataTable->with([
             'project_id' => $project->id,
@@ -76,7 +76,7 @@ class ProjectController extends Controller
             "location_id" => "required|numeric",
             "name" => "required|string",
             "description" => "required|string",
-            "modal" => "required|numeric|min_digits:1",
+            "modal" => "required|numeric|min:1",
             "start_date" => "required|date",
             "end_date" => "required|date",
             "status_id" => "required|numeric",

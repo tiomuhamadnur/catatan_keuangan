@@ -31,11 +31,11 @@ class AbsorptionController extends Controller
     public function store(Request $request)
     {
         $rawData = $request->validate([
-            'project_id' => 'required|numeric|min_digits:1',
+            'project_id' => 'required|numeric|min:1',
             'type' => 'required|string',
             'name' => 'required|string',
-            'price' => 'required|numeric|min_digits:1',
-            'qty' => 'required|numeric|min_digits:1',
+            'price' => 'required|numeric|min:1',
+            'qty' => 'required|numeric|min:0.01',
             'unit_id' => 'required|numeric',
             'date' => 'required|date',
             'remark' => 'nullable|string',
@@ -82,11 +82,11 @@ class AbsorptionController extends Controller
     public function update(Request $request, string $uuid)
     {
         $rawData = $request->validate([
-            'project_id' => 'required|numeric|min_digits:1',
+            'project_id' => 'required|numeric|min:1',
             'type' => 'required|string',
             'name' => 'required|string',
-            'price' => 'required|numeric|min_digits:1',
-            'qty' => 'required|numeric|min_digits:1',
+            'price' => 'required|numeric|min:1',
+            'qty' => 'required|numeric|min:0.01',
             'unit_id' => 'required|numeric',
             'date' => 'required|date',
             'remark' => 'nullable|string',

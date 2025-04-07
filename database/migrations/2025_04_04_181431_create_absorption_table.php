@@ -14,9 +14,9 @@ return new class extends Migration
             $table->bigInteger('project_id')->unsigned()->nullable();
             $table->string('type')->nullable();
             $table->string('name')->nullable();
-            $table->string('qty')->nullable();
-            $table->bigInteger('price')->nullable();
-            $table->bigInteger('total')->nullable();
+            $table->float('qty')->nullable();
+            $table->float('price')->nullable();
+            $table->float('total')->nullable();
             $table->bigInteger('unit_id')->unsigned()->nullable();
             $table->date('date')->nullable();
             $table->text('photo')->nullable();

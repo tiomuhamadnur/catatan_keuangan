@@ -23,6 +23,18 @@
                                     Actions
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-end'>
+                                    <a class='dropdown-item' href='{{ route('project.index') }}'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M5 12l14 0" />
+                                            <path d="M5 12l6 6" />
+                                            <path d="M5 12l6 -6" />
+                                        </svg>
+                                        Back
+                                    </a>
                                     <a class='dropdown-item' href='#'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -104,9 +116,12 @@
                         <td>@currency($project->absorptions->where('type', 'pemasukan')->sum('total'))</td>
                     </tr>
                     <tr>
+                        @php
+                        $sisa = $project->modal - $project->absorptions->sum('total');
+                        @endphp
                         <td class="fw-bolder">Sisa</td>
                         <td>:</td>
-                        <td>@currency($project->modal - $project->absorptions->sum('total'))</td>
+                        <td class="fw-bolder @if($sisa <= 0) text-danger @else text-success @endif">@currency($sisa)</td>
                     </tr>
                 </table>
             </div>
@@ -161,7 +176,7 @@
                         <div class="mb-3">
                             <label class="form-label required">Qty.</label>
                             <input type="number" class="form-control" name="qty" placeholder="Input qty"
-                                autocomplete="off" required min="1">
+                                autocomplete="off" required min="0.01" step="0.01">
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Unit</label>
@@ -249,7 +264,7 @@
                         <div class="mb-3">
                             <label class="form-label required">Qty.</label>
                             <input type="number" class="form-control" name="qty" id="qty_edit"
-                                placeholder="Input qty" autocomplete="off" required min="1">
+                                placeholder="Input qty" autocomplete="off" required min="0.01" step="0.01">
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Unit</label>
