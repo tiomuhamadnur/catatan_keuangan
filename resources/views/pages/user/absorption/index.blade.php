@@ -219,6 +219,7 @@
             </div>
         </div>
     </div>
+    <!-- End Add Modal -->
 
     <!-- Edit Modal -->
     <div class="modal modal-blur fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -309,6 +310,7 @@
             </div>
         </div>
     </div>
+    <!-- End Edit Modal -->
 
     <!-- Photo Modal -->
     <div class="modal modal-blur fade" id="photoModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -335,6 +337,7 @@
             </div>
         </div>
     </div>
+    <!-- End Photo Modal -->
 @endsection
 
 @push('scripts')

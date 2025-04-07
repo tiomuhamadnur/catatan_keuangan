@@ -113,7 +113,38 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Description</label>
-                            <textarea class="form-control" name="description" id="description" rows="4" placeholder="input description" required></textarea>
+                            <textarea class="form-control" name="description" id="description" rows="4" placeholder="input description"
+                                required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Price (Rp)</label>
+                            <input type="text" class="form-control" name="price" placeholder="Input price (Rp)"
+                                autocomplete="off" required>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="mb-3 col-sm-6">
+                                <label class="form-label required">Start Date</label>
+                                <input type="date" class="form-control" name="start_date"
+                                    placeholder="input start date" required>
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label class="form-label required">End Date</label>
+                                <input type="date" class="form-control" name="end_date" placeholder="input end date"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Owner</label>
+                            <input type="text" class="form-control" name="owner" placeholder="Input owner"
+                                autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Photo</label>
+                            <div class="text-left mb-2">
+                                <img class="img-thumbnail" id="previewImage" src="#" alt="Tidak ada photo"
+                                    style="max-width: 250px; max-height: 250px; display: none;">
+                            </div>
+                            <input type="file" class="form-control" name="photo" id="photo" accept="image/*">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -135,6 +166,7 @@
             </div>
         </div>
     </div>
+    <!-- End Add Modal -->
 
     <!-- Edit Modal -->
     <div class="modal modal-blur fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -155,7 +187,39 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label required">Description</label>
-                            <textarea class="form-control" name="description" id="description_edit" rows="4" placeholder="input description" required></textarea>
+                            <textarea class="form-control" name="description" id="description_edit" rows="4"
+                                placeholder="input description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Price (Rp)</label>
+                            <input type="text" class="form-control" name="price" id="price_edit" placeholder="Input price (Rp)"
+                                autocomplete="off" required>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="mb-3 col-sm-6">
+                                <label class="form-label required">Start Date</label>
+                                <input type="date" class="form-control" name="start_date" id="start_date_edit"
+                                    placeholder="input start date" required>
+                            </div>
+                            <div class="mb-3 col-sm-6">
+                                <label class="form-label required">End Date</label>
+                                <input type="date" class="form-control" name="end_date" id="end_date_edit"
+                                    placeholder="input end date" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label required">Owner</label>
+                            <input type="text" class="form-control" name="owner" id="owner_edit"
+                                placeholder="Input owner" autocomplete="off" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Photo</label>
+                            <div class="mb-2 text-left">
+                                <img class="img-thumbnail" id="previewImageEdit" src="#" alt="Tidak ada photo"
+                                    style="max-width: 250px; max-height: 250px; display: none;">
+                            </div>
+                            <input type="file" class="form-control" name="photo" id="photo_edit" accept="image/*"
+                                autocomplete="off">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -177,6 +241,34 @@
             </div>
         </div>
     </div>
+    <!-- End Edit Modal -->
+
+    <!-- Photo Modal -->
+    <div class="modal modal-blur fade" id="photoModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="mb-4 text-center align-middle">
+                            <div class="mx-auto">
+                                <img src="#" id="photo_modal" class="img-thumbnail" alt="Tidak ada photo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Close
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Photo Modal -->
 @endsection
 
 @push('scripts')
@@ -186,14 +278,75 @@
 @section('javascript')
     <script>
         $(document).ready(function() {
+            const imageInput = document.getElementById('photo');
+            const previewImage = document.getElementById('previewImage');
+
+            imageInput.addEventListener('change', function(event) {
+                const selectedFile = event.target.files[0];
+
+                if (selectedFile) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                    }
+
+                    reader.readAsDataURL(selectedFile);
+                }
+            });
+
+            const imageInputEdit = document.getElementById('photo_edit');
+            const previewImageEdit = document.getElementById('previewImageEdit');
+
+            imageInputEdit.addEventListener('change', function(event) {
+                const selectedFile = event.target.files[0];
+
+                if (selectedFile) {
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        previewImageEdit.src = e.target.result;
+                        previewImageEdit.style.display = 'block';
+                    }
+
+                    reader.readAsDataURL(selectedFile);
+                }
+            });
+
             $('#editModal').on('show.bs.modal', function(e) {
                 var url = $(e.relatedTarget).data('url');
                 var name = $(e.relatedTarget).data('name');
                 var description = $(e.relatedTarget).data('description');
+                var start_date = $(e.relatedTarget).data('start_date');
+                var end_date = $(e.relatedTarget).data('end_date');
+                var owner = $(e.relatedTarget).data('owner');
+                var price = $(e.relatedTarget).data('price');
+                var photo_url = $(e.relatedTarget).data('photo_url');
 
                 document.getElementById("editForm").action = url;
                 $('#name_edit').val(name);
                 $('#description_edit').val(description);
+                $('#start_date_edit').val(start_date);
+                $('#end_date_edit').val(end_date);
+                $('#owner_edit').val(owner);
+                $('#price_edit').val(price);
+
+                const previewImageEdit = document.getElementById('previewImageEdit');
+
+                if (photo_url) {
+                    previewImageEdit.src = photo_url;
+                    previewImageEdit.style.display = 'block';
+                } else {
+                    previewImageEdit.src = '';
+                    previewImageEdit.style.display = 'none';
+                }
+            });
+
+            $('#photoModal').on('show.bs.modal', function(e) {
+                var photo = $(e.relatedTarget).data('photo');
+
+                document.getElementById("photo_modal").src = photo;
             });
         });
     </script>

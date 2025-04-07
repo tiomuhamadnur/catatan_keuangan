@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Helpers\FormatRupiahHelper;
 use App\Models\Location;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -20,6 +21,10 @@ class LocationDataTable extends DataTable
         ->addColumn('#', function ($item) {
             $editRoute = route('location.update', $item->uuid);
             $deleteRoute = route('location.destroy', $item->uuid);
+            $photoUrl = null;
+            if ($item->photo) {
+                $photoUrl = asset('storage/' . $item->photo);
+            }
             $actionButton = "<div class='dropdown'>
                             <button class='btn btn-tabler btn-icon' data-bs-toggle='dropdown' aria-label='Tabler'>
                                 <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-settings'>
@@ -30,7 +35,7 @@ class LocationDataTable extends DataTable
                             </button>
 
                             <div class='dropdown-menu dropdown-menu-end'>
-                                <a class='dropdown-item' href='#' data-bs-toggle='modal' data-bs-target='#editModal' data-url='{$editRoute}' data-name='{$item->name}' data-description='{$item->description}'>
+                                <a class='dropdown-item' href='#' data-bs-toggle='modal' data-bs-target='#editModal' data-url='{$editRoute}' data-name='{$item->name}' data-description='{$item->description}' data-price='{$item->price}' data-photo_url='{$photoUrl}' data-start_date='{$item->start_date}' data-end_date='{$item->end_date}' data-owner='{$item->owner}'>
                                     <svg  xmlns='http://www.w3.org/2000/svg'  width='24'  height='24'  viewBox='0 0 24 24'  fill='none'  stroke='currentColor'  stroke-width='2'  stroke-linecap='round'  stroke-linejoin='round'  class='icon icon-tabler icons-tabler-outline icon-tabler-pencil'><path stroke='none' d='M0 0h24v24H0z' fill='none'/><path d='M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4' /><path d='M13.5 6.5l4 4' /></svg>
                                     Edit
                                 </a>
@@ -50,7 +55,25 @@ class LocationDataTable extends DataTable
 
             return $actionButton;
         })
-        ->rawColumns(['#']);
+        ->addColumn('price', function ($item) {
+            return FormatRupiahHelper::currency($item->price);
+        })
+        ->addColumn('photo', function ($item) {
+            if (!$item->photo) {
+                return '';
+            }
+            $photoUrl = asset('storage/' . $item->photo);
+            return "<button data-bs-toggle='modal' data-bs-target='#photoModal' data-photo='{$photoUrl}' class='btn btn-success btn-icon'>
+                        <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='icon icon-tabler icons-tabler-outline icon-tabler-photo'>
+                            <path stroke='none' d='M0 0h24v24H0z' fill='none'/>
+                            <path d='M15 8h.01' />
+                            <path d='M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z' />
+                            <path d='M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5' />
+                            <path d='M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3' />
+                        </svg>
+                    </button>";
+        })
+        ->rawColumns(['#', 'photo']);
     }
 
     public function query(Location $model): QueryBuilder
@@ -90,7 +113,16 @@ class LocationDataTable extends DataTable
 
     public function getColumns(): array
     {
-        return [Column::computed('#')->exportable(false)->printable(false)->width(60)->addClass('text-center'), Column::make('name')->title('Name'), Column::make('description')->title('Description')];
+        return [
+            Column::computed('#')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            Column::make('name')->title('Name'),
+            Column::make('description')->title('Description'),
+            Column::computed('price')->title('Price'),
+            Column::make('start_date')->title('Start Date'),
+            Column::make('end_date')->title('End Date'),
+            Column::make('owner')->title('Owner'),
+            Column::computed('photo')->title('Photo'),
+    ];
     }
 
     protected function filename(): string
